@@ -1,9 +1,11 @@
 require './app/repositories/user_repository'
+require './app/model/user'
 
 module Users
   class UserCreate
-      def initialize(params: , user_repository: UserRepository.new)
+      def initialize(params: user: User, user_repository: UserRepository.new)
         @params = params
+        @user = user
         @user_repository = user_repository
       end
 
@@ -13,7 +15,8 @@ module Users
 
       private
       def save_user
-        @user_repository.create(@params)
+        user = @user.new(params[:email, params[:password]])
+        @user_repository.create!(user.to_hash)
       end
   end
 end
